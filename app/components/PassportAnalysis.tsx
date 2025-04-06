@@ -1,0 +1,61 @@
+// app/components/PassportAnalysis.tsx
+'use client';
+
+import { useState } from 'react';
+import { Button } from './ui/button';
+import { Input } from './ui/input';
+import { Label } from './ui/label';
+import { useFormData } from '../providers/FormDataProvider';
+
+export function PassportAnalysis() {
+  const { updateNestedFormData } = useFormData();
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [analyzed, setAnalyzed] = useState(false);
+  
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setSelectedFile(e.target.files[0]);
+    }
+  };
+  
+  const handleAnalyze = () => {
+    // In a real application, this would upload and analyze the file
+    // For demo purposes, we'll just set the state
+    setAnalyzed(true);
+  };
+  
+  return (
+    <div className="border border-dashed rounded-lg p-6 mb-6">
+      <h2 className="text-xl text-blue-700 mb-4">Passport Analysis (Optional)</h2>
+      
+      <div className="mb-4">
+        <Label htmlFor="passport-pdf">Upload Passport PDF:</Label>
+        <Input 
+          id="passport-pdf" 
+          type="file" 
+          accept=".pdf" 
+          onChange={handleFileChange}
+          className="mt-1"
+        />
+      </div>
+      
+      <Button 
+        onClick={handleAnalyze}
+        disabled={!selectedFile}
+        className="bg-blue-600 hover:bg-blue-700"
+      >
+        Analyze & Fill Fields
+      </Button>
+      
+      {analyzed && (
+        <p className="text-green-600 mt-4">
+          Fields filled from passport analysis. Please review.
+        </p>
+      )}
+      
+      <p className="text-gray-600 mt-2 text-sm">
+        Upload passport to auto-fill fields below.
+      </p>
+    </div>
+  );
+}
